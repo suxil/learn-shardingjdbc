@@ -1,0 +1,93 @@
+server:
+  port: 11001
+  servlet:
+    context-path: /
+  ssl:
+    enabled: false
+
+spring:
+  messages:
+    basename: i18n/messages
+
+  shardingsphere:
+    datasource:
+      ais-db:
+        url: jdbc:postgresql://192.168.159.140:15432/ais-db?rewriteBatchedStatements=true
+        username: postgres
+        password: admin@1231
+        driver-class-name: org.postgresql.Driver
+
+    rules:
+      sharding:
+        tables:
+          tsd_ais_message:
+            table-strategy:
+              standard:
+                sharding-column: mmsi,utc
+                sharding-algorithm-name: tsd-ais-message-algorithms
+#            database-strategy:
+#              hint:
+#                tsd-ais-message-algorithms:
+#                  sharding-algorithm-name: 'tsd-ais-message-algorithms'
+#            actual-data-nodes: 'tsd_ais_message_$->${mmsi % 100}'
+
+        sharding-algorithms:
+          tsd-ais-message-algorithms:
+            type: CLASS_BASED
+            props:
+              strategy: HINT
+#              algorithmClassName: 'io.github.suxil.shardingjdbc.sharding.TsdAisMessageShardingAlgorithm'
+              algorithmClassName: 'org.apache.shardingsphere.sharding.algorithm.sharding.hint.HintInlineShardingAlgorithm'
+
+
+
+  datasource:
+    url: jdbc:postgresql://192.168.159.140:15432/ais-db?rewriteBatchedStatements=true
+    username: postgres
+    password: admin@1231
+    driver-class-name: org.postgresql.Driver
+
+    druid:
+      initial-size: 5
+      max-active: 10
+      min-idle: 5
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      validation-query: SELECT 1 FROM DUAL
+      validation-query-timeout: 60000
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 100000
+      #max-evictable-idle-time-millis: 100000
+      filters: stat,wall
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        #exclusions: *.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*
+        session-stat-enable: true
+        session-stat-max-count: 1000
+        principal-session-name:
+        principal-cookie-name:
+        profile-enable: true
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        reset-enable: true
+        login-username: druid
+        login-password: druid
+        #allow: '*'
+        deny:
+      filter:
+        stat:
+          db-type: mysql
+          log-slow-sql: true
+          slow-sql-millis: 2000
+        wall:
+          enabled: true
+          db-type: mysql
+          config.delete-allow: false
+          config.drop-table-allow: false
+

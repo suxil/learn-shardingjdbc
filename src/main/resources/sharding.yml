@@ -1,0 +1,45 @@
+# 配置真实数据源
+dataSources:
+  # 配置第 1 个数据源
+  ais-db: !!org.apache.commons.dbcp2.BasicDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:postgresql://192.168.159.140:15432/ais-db?rewriteBatchedStatements=true
+    username: postgres
+    password: admin@1231
+
+rules:
+  # 配置分片规则
+  - !SHARDING
+    tables:
+      # 配置 tsd_ais_message 表规则
+      tsd_ais_message:
+        actualDataNodes: ais-db.tsd_ais_message${0..1}
+        # 配置分库策略
+#        databaseStrategy:
+#          standard:
+#            shardingColumn: mmsi
+#            shardingAlgorithmName: database_inline
+        # 配置分表策略
+        tableStrategy:
+          standard:
+            shardingColumn: mmsi,utc
+            shardingAlgorithmName: table_inline
+      #tsd_ais_message_item:
+      # 省略配置 tsd_ais_message_item 表规则...
+      # ...
+
+    # 配置分片算法
+    shardingAlgorithms:
+#      database_inline:
+#        type: INLINE
+#        props:
+#          algorithm-expression: ds${user_id % 2}
+      table_inline:
+        type: INLINE
+        props:
+          algorithm-expression: tsd_ais_message_${mmsi % 100}
+      tsd-ais-message-algorithms:
+        type: CLASS_BASED
+        props:
+          strategy: HINT
+          algorithmClassName: 'io.github.suxil.shardingjdbc.sharding.TsdAisMessageShardingAlgorithm'
