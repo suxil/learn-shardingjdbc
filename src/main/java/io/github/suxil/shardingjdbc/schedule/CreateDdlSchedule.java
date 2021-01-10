@@ -1,6 +1,6 @@
 package io.github.suxil.shardingjdbc.schedule;
 
-import io.github.suxil.shardingjdbc.service.CreateDdlService;
+import io.github.suxil.shardingjdbc.service.TableDdlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 public class CreateDdlSchedule {
 
     @Autowired
-    private CreateDdlService createDdlService;
+    private TableDdlService tableDdlService;
 
     @Scheduled(cron = "0 */1 * * * ?")
     public void createAisMessageTableAndIndex() {
         System.out.println("create ais message table and index");
 
-        createDdlService.createAisMessageTableDdl();
+        tableDdlService.createAisMessageTableDdl();
     }
 
 }

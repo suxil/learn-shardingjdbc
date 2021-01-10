@@ -11,14 +11,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = ShardingJdbcApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CreateDdlServiceTest {
+public class TableDdlServiceTest {
 
     @Autowired
-    private CreateDdlService createDdlService;
+    private TableDdlService tableDdlService;
 
     @Test
-    public void createTableDdlTest() {
-        createDdlService.createAisMessageTableDdl();
+    public void createAisMessageTableDdlTest() {
+        tableDdlService.createAisMessageTableDdl();
+    }
+
+    @Test
+    public void dropAisMessageTableDdlTest() {
+        tableDdlService.dropAisMessageTableDdl();
     }
 
 }
