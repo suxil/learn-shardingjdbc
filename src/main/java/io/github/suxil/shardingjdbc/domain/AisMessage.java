@@ -2,16 +2,16 @@ package io.github.suxil.shardingjdbc.domain;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "tsd_ais_message", catalog = "ais 消息")
-public class TsdAisMessage {
+@Table(name = "ais_message", catalog = "ais 消息")
+public class AisMessage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -20,6 +20,12 @@ public class TsdAisMessage {
     public static final String LAT = "lat";
     public static final String LON = "lon";
     public static final String AIS_TYPE = "ais_type";
+
+    @Id
+    @Column(name = "id", length = 32, unique = true, nullable = false)
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+    String id;
 
     @Column(name = "mmsi")
     private int mmsi;

@@ -1,9 +1,13 @@
 server:
-  port: 11001
+  port: 11002
   servlet:
     context-path: /
   ssl:
     enabled: false
+
+logging:
+  level:
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
 
 spring:
   messages:
@@ -11,37 +15,27 @@ spring:
 
   shardingsphere:
     datasource:
+      names: ais-db
       ais-db:
+        type: com.alibaba.druid.pool.DruidDataSource
         url: jdbc:postgresql://192.168.159.140:15432/ais-db?rewriteBatchedStatements=true
         username: postgres
         password: admin@1231
         driver-class-name: org.postgresql.Driver
 
-    rules:
-      sharding:
-        tables:
-          tsd_ais_message:
-            table-strategy:
-              standard:
-                sharding-column: mmsi,utc
-                sharding-algorithm-name: tsd-ais-message-algorithms
-#            database-strategy:
-#              hint:
-#                tsd-ais-message-algorithms:
-#                  sharding-algorithm-name: 'tsd-ais-message-algorithms'
-#            actual-data-nodes: 'tsd_ais_message_$->${mmsi % 100}'
-
-        sharding-algorithms:
-          tsd-ais-message-algorithms:
-            type: CLASS_BASED
-            props:
-              strategy: HINT
-#              algorithmClassName: 'io.github.suxil.shardingjdbc.sharding.TsdAisMessageShardingAlgorithm'
-              algorithmClassName: 'org.apache.shardingsphere.sharding.algorithm.sharding.hint.HintInlineShardingAlgorithm'
+    sharding:
+      tables:
+        ais_message:
+          actual-data-nodes: ais-db.ais_message
+          table-strategy:
+            complex:
+              sharding-columns: mmsi,utc
+              algorithmClassName: io.github.suxil.shardingjdbc.sharding.TsdAisMessageShardingAlgorithm
 
 
 
   datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:postgresql://192.168.159.140:15432/ais-db?rewriteBatchedStatements=true
     username: postgres
     password: admin@1231
@@ -54,8 +48,8 @@ spring:
       max-wait: 60000
       pool-prepared-statements: true
       max-pool-prepared-statement-per-connection-size: 20
-      validation-query: SELECT 1 FROM DUAL
-      validation-query-timeout: 60000
+      #validation-query: SELECT 1 FROM DUAL
+      #validation-query-timeout: 60000
       test-on-borrow: false
       test-on-return: false
       test-while-idle: true
