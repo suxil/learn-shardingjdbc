@@ -1,6 +1,5 @@
 package io.github.suxil.shardingjdbc.service;
 
-import io.github.suxil.shardingjdbc.schedule.CreateDdlSchedule;
 import io.github.suxil.shardingjdbc.util.ShardingAlgorithmUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
