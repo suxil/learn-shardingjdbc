@@ -14,6 +14,10 @@ spring:
     basename: i18n/messages
 
   shardingsphere:
+    props:
+      sql:
+        show: false
+
     datasource:
       names: ais-db
       ais-db:
@@ -30,7 +34,7 @@ spring:
           table-strategy:
             complex:
               sharding-columns: mmsi,utc
-              algorithmClassName: io.github.suxil.shardingjdbc.sharding.TsdAisMessageShardingAlgorithm
+              algorithmClassName: io.github.suxil.shardingjdbc.sharding.AisMessageShardingAlgorithm
 
 
 

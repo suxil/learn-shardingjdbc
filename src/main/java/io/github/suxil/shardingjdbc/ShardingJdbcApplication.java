@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -25,13 +26,8 @@ import javax.sql.DataSource;
         "io.github.suxil.shardingjdbc.repository"
 })
 @EnableTransactionManagement
+@EnableScheduling
 public class ShardingJdbcApplication {
-
-//    @Bean
-//    @ConfigurationProperties("spring.datasource")
-//    public DataSource dataSource(){
-//        return DruidDataSourceBuilder.create().build();
-//    }
 
     @Autowired
     @Qualifier("shardingDataSource")
@@ -48,7 +44,6 @@ public class ShardingJdbcApplication {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-//        vendorAdapter.setGenerateDdl(true);
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);

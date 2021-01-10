@@ -3,10 +3,10 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.suxil</groupId>
-	<artifactId>learn-sharding-jdbc</artifactId>
+	<artifactId>learn-shardingjdbc</artifactId>
 	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>learnsharding-jdbc</name>
+	<name>learn-shardingjdbc</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -225,7 +225,12 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.1.1</version>
+				<version>3.1.0</version>
+				<configuration>
+					<configLocation>rulesets/checkstyle.xml</configLocation>
+					<includeTestSourceDirectory>true</includeTestSourceDirectory>
+					<!--<excludes>**/autogen/**/*</excludes>-->
+				</configuration>
 			</plugin>
 
 			<plugin>
@@ -241,13 +246,9 @@
 					</execution>
 				</executions>
 				<configuration>
-					<!-- enable incremental analysis -->
-					<analysisCache>true</analysisCache>
-					<!-- analysisCacheLocation: optional - points to the following location by default -->
-<!--					<analysisCacheLocation>${project.build.directory}/pmd/pmd.cache</analysisCacheLocation>-->
-<!--					<linkXRef>true</linkXRef>-->
+					<aggregate>true</aggregate>
 					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
-					<compileSourceRoots>${project.build.sourceDirectory}</compileSourceRoots>
+					<targetJdk>${java.version}</targetJdk>
 				</configuration>
 			</plugin>
 
